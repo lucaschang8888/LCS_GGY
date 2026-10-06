@@ -1,0 +1,356 @@
++<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UVA 531｜Compromise — LCS 題目解析</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2f;--panel2:#17223b;--line:#2b395c;--text:#f2f5ff;--muted:#aab5cf;--blue:#7180ff;--green:#35d399;--yellow:#f5bd42;--red:#fb7185}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#080d1b 0,#0b1020 45%,#0d1324 100%);color:var(--text);font-family:Inter,"Noto Sans TC",system-ui,sans-serif;line-height:1.75}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}.top{position:sticky;top:0;z-index:20;background:#080d1bea;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{display:flex;gap:6px;overflow:auto;padding:10px 0}.nav a{color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:8px;white-space:nowrap;font-size:14px}.nav a:hover{background:var(--panel2);color:#fff}.hero{padding:70px 0 46px;border-bottom:1px solid var(--line)}.eyebrow{color:#aeb7ff;font-weight:900;letter-spacing:.12em;font-size:13px}.hero h1{font-size:clamp(44px,7vw,78px);line-height:1.02;letter-spacing:-.05em;margin:12px 0}.hero h1 span{color:var(--blue)}.hero p{max-width:790px;color:var(--muted);font-size:19px}.meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}.pill{border:1px solid var(--line);background:var(--panel);padding:7px 12px;border-radius:999px;font-size:13px;color:#dce2ff}.section{padding:52px 0}.section-title{display:flex;align-items:end;gap:14px;margin-bottom:20px}.section-title .no{color:var(--blue);font-weight:900;font-size:14px}.section-title h2{font-size:32px;margin:0}.lead{color:var(--muted);font-size:17px;max-width:850px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:linear-gradient(145deg,#121a2f,#0f1729);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px}.muted{color:var(--muted)}.callout{border-left:4px solid var(--blue);background:#111a31;padding:16px 18px;border-radius:0 12px 12px 0;margin-top:16px}.problem-box{background:#070c17;border:1px solid #33415f;border-radius:16px;padding:22px;font-family:ui-monospace,SFMono-Regular,monospace;color:#dfe6ff;white-space:pre-wrap}.label{font-size:12px;color:#8795b8;font-weight:900;letter-spacing:.1em;margin-bottom:7px}.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}.flow .step{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}.flow .step b{display:block;margin-bottom:5px}.num{width:28px;height:28px;border-radius:50%;background:#27336a;color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px}.compare{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}.arrow{font-size:26px;color:var(--blue);font-weight:900}.sequence{display:flex;gap:6px;flex-wrap:wrap}.word{padding:7px 10px;background:#202b4b;border:1px solid #344365;border-radius:8px;font-family:ui-monospace,monospace}.word.hit{background:#124a3c;border-color:#269d78;color:#b8ffe9}.word.pick{background:#4b3915;border-color:var(--yellow);color:#ffe6a3}.code{background:#070c15;border:1px solid #263552;border-radius:14px;padding:20px;overflow:auto;font:14px/1.75 ui-monospace,SFMono-Regular,Menlo,monospace;color:#dfe6ff}.code .kw{color:#aab4ff}.code .cm{color:#71809e}.logic{display:grid;gap:12px}.logic-row{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:14px;border:1px solid var(--line);background:var(--panel);border-radius:12px}.tag{font-weight:900;color:#b8c0ff}.anim-controls{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.btn{border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer}.btn.primary{background:var(--blue);border-color:var(--blue)}.btn:hover{filter:brightness(1.1)}.anim-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.table-wrap{overflow:auto;background:#080d18;border:1px solid var(--line);border-radius:14px;padding:12px}.dp{border-collapse:separate;border-spacing:4px;margin:auto}.dp th{color:#9aa8c8;font-size:12px;min-width:62px;height:28px}.dp td{min-width:62px;height:48px;text-align:center;border:1px solid #293755;border-radius:8px;background:#111a2d;transition:.18s;font-weight:800}.dp td.current{border:2px solid var(--blue);background:#29336b;transform:scale(1.04)}.dp td.match{background:#104737;border-color:#23956f}.dp td.path{box-shadow:inset 0 0 0 2px var(--yellow);background:#463715}.dp td.final{background:var(--blue);border-color:var(--blue)}.explain{min-height:210px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}.status{font-weight:900;color:#dfe5ff}.big-result{font-size:25px;font-weight:900;margin-top:15px}.big-result span{color:#9ff5d8}.bar{height:7px;background:#070b14;border-radius:99px;overflow:hidden;margin:12px 0}.bar i{display:block;height:100%;width:0;background:var(--blue);transition:.2s}.trace-list{display:grid;gap:9px}.trace-item{padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px}.trace-item b{color:#cbd2ff}.check{color:var(--green);font-weight:900}.warning{color:#ffd58a;background:#2b2110;border:1px solid #5d481d;padding:13px;border-radius:10px}.mini{font-size:13px;color:var(--muted)}footer{padding:40px 0 65px;color:#7887a7;border-top:1px solid var(--line)}a.ext{color:#aeb7ff}@media(max-width:800px){.grid2,.anim-grid,.compare{grid-template-columns:1fr}.grid3,.flow{grid-template-columns:1fr 1fr}.arrow{display:none}.logic-row{grid-template-columns:1fr}.hero{padding-top:45px}}@media(max-width:520px){.grid3,.flow{grid-template-columns:1fr}.wrap{width:min(100% - 22px,1160px)}.section{padding:38px 0}}
+</style>
+<style>
+.code-card{padding:0;overflow:hidden}.code-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111a2f;border-bottom:1px solid #263552}.code-head b{font-size:15px}.code-head span{font-size:12px;color:#8e9bb8}.code-body{padding:22px;overflow:auto;background:#060a12}.code-body .code{margin:0;padding:0;border:0;border-radius:0;background:transparent;min-width:720px;font-size:14px;line-height:1.9;white-space:pre}.code-note{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 22px 22px}.code-note div{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:13px}.code-note b{display:block;color:#cbd2ff;margin-bottom:3px}@media(max-width:800px){.code-note{grid-template-columns:1fr}.code-body .code{font-size:13px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap nav">
+<a href="#lcs">01 LCS</a><a href="#lcs-dp">02 LCS 的 DP</a><a href="#start">03 UVa 531 題目</a><a href="#input">04 輸入輸出</a><a href="#idea">05 套用 LCS</a><a href="#animation">06 動畫</a><a href="#code">07 C++</a><a href="#trace">08 回溯</a><a href="#summary">09 總結</a>
+</div></header>
+<main class="wrap">
+<section class="hero" id="lcs">
+<div class="eyebrow">UVa ONLINE JUDGE · PROBLEM 531</div>
+<h1><span>LCS</span><br>先懂演算法，再解 UVa 531</h1>
+<p>這份網站分成兩個階段：第一階段先完整建立 LCS 的概念、DP、遞推與回溯；第二階段再看 UVa 531 如何把「字元 LCS」變成「單字 LCS」，最後寫成可以 AC 的 C++ 程式。</p>
+<div class="meta"><span class="pill">Part 1 · LCS</span><span class="pill">Part 2 · UVa 531</span><span class="pill">Dynamic Programming</span><span class="pill">C++17</span></div>
+</section>
+
+<section class="section" id="lcs">
+<div class="section-title"><span class="no">01</span><h2>LCS 是什麼？先把演算法講懂</h2></div>
+<p class="lead">LCS 全名是 <strong>Longest Common Subsequence</strong>，中文是「最長共同子序列」。給兩個序列，我們要找出一個同時出現在兩者中、順序不變，而且長度最長的子序列。</p>
+<div class="grid2">
+<div class="card"><h3>Subsequence：可以跳著選</h3><p class="muted">例如 <b>ABCBDAB</b> 可以選出 <b>BCBA</b>。中間可以跳過字元，但 B → C → B → A 的相對順序不能改變。</p><div class="sequence"><span class="word pick">B</span><span class="word pick">C</span><span class="word pick">B</span><span class="word pick">A</span></div></div>
+<div class="card"><h3>不是 Substring</h3><p class="muted">Substring 要求連續；Subsequence 不要求連續。LCS 要處理的是後者，所以不能只找最長連續區段。</p><div class="callout"><b>一句話：</b>可以跳過，但不能亂掉順序。</div></div>
+</div>
+<div class="card section"><h3>一個最直觀的例子</h3><div class="compare"><div><div class="label">A</div><div class="sequence"><span class="word">A</span><span class="word hit">B</span><span class="word hit">C</span><span class="word">B</span><span class="word hit">D</span><span class="word hit">A</span><span class="word">B</span></div></div><div class="arrow">↔</div><div><div class="label">B</div><div class="sequence"><span class="word">B</span><span class="word hit">D</span><span class="word hit">C</span><span class="word">A</span><span class="word">B</span><span class="word">A</span></div></div></div><p class="muted">重點不是「哪些字出現過」，而是「能不能按照相同順序挑出最長的一串」。</p></div>
+</section>
+
+<section class="section" id="lcs-dp">
+<div class="section-title"><span class="no">02</span><h2>LCS 為什麼可以用 DP？</h2></div>
+<div class="grid2">
+<div class="card"><h3>狀態：dp[i][j]</h3><div class="callout"><b>dp[i][j]</b> = A 的前 i 個元素與 B 的前 j 個元素的 LCS 長度。</div><p class="muted">我們不是一次解完整個問題，而是先解很多「前綴」的小問題，再把答案組合起來。</p></div>
+<div class="card"><h3>兩種情況</h3><p class="muted"><b>相同：</b>最後兩個元素可以一起加入答案。<br><b>不同：</b>最後兩個元素不能同時配對，要嘗試跳過其中一個。</p></div>
+</div>
+<div class="logic section">
+<div class="logic-row"><div class="tag">相同</div><div><b>A[i-1] == B[j-1]</b><br><span class="muted"><strong>dp[i][j] = dp[i-1][j-1] + 1</strong>。因為這兩個元素可以成為 LCS 的最後一個元素。</span></div></div>
+<div class="logic-row"><div class="tag">不同</div><div><b>A[i-1] != B[j-1]</b><br><span class="muted"><strong>dp[i][j] = max(dp[i-1][j], dp[i][j-1])</strong>。分別嘗試跳過 A 的最後元素或 B 的最後元素。</span></div></div>
+<div class="logic-row"><div class="tag">邊界</div><div><b>i = 0 或 j = 0</b><br><span class="muted">其中一邊是空序列，沒有共同元素，所以 LCS = 0。</span></div></div>
+</div>
+<div class="callout"><b>到這裡先記住：</b>「相同 → 左上角 + 1；不同 → 上面和左邊取最大」。這就是 LCS DP 的核心。</div>
+</section>
+
+<section class="section" id="start">
+<div class="section-title"><span class="no">01</span><h2>先把題目翻成白話</h2></div>
+<p class="lead">前面我們講的是「元素可以是字元」的 LCS。現在來看 UVa 531：它做的事情完全一樣，只是把 LCS 的元素從<strong>字元換成單字</strong>。</p>
+<div class="grid2">
+<div class="card"><h3>題目真正要你做什麼？</h3><p class="muted">兩位政治人物各自輸入一份由單字組成的提案。程式要找出兩份提案中，順序不變、可以跳過其他單字的<strong>最長共同單字序列</strong>。</p><div class="callout"><b>關鍵：</b>這就是 LCS，只是比較單位從 character 變成 word。</div></div>
+<div class="card"><h3>為什麼叫 Compromise？</h3><p class="muted">題目的故事設定是兩位政治人物各提出方案，電腦找出雙方都同意、而且順序一致的最長單字序列，作為折衷方案。</p></div>
+</div>
+<div class="card section"><h3>把 LCS 直接套進題目</h3><div class="compare"><div><div class="label">TEXT A</div><div class="sequence"><span class="word">we</span><span class="word">study</span><span class="word pick">algorithms</span><span class="word pick">every</span><span class="word">day</span></div></div><div class="arrow">→</div><div><div class="label">TEXT B</div><div class="sequence"><span class="word">we</span><span class="word">practice</span><span class="word pick">algorithms</span><span class="word pick">every</span><span class="word">week</span></div></div></div><p class="muted">這時元素不是 A、B、C 這種字元，而是 <b>we / study / algorithms / every / day</b>。LCS 思想完全不變。</p></div>
+</section>
+
+<section class="section" id="input">
+<div class="section-title"><span class="no">04</span><h2>UVa 531 的 Input / Output</h2></div>
+<div class="grid2">
+<div><div class="label">INPUT RULE</div><div class="problem-box">test case 1：第一段文字
+test case 1：第二段文字
+#
+test case 2：第一段文字
+test case 2：第二段文字
+#
+...
+EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔；一行只有 <b>#</b> 時，代表這一段文字結束。整個輸入以 EOF 結束。</p></div>
+<div><div class="label">OUTPUT RULE</div><div class="problem-box">每組測資輸出一行
+最長共同單字子序列</div><p class="muted">如果有多個同長度答案，任意一個都可以。單字之間用一個空白分隔，最後換行。</p></div>
+</div>
+<div class="grid3 section">
+<div class="card"><h3>長度限制</h3><p class="muted">每個 word 少於 30 個字元。</p></div>
+<div class="card"><h3>每段文字</h3><p class="muted">少於 100 個 words。</p></div>
+<div class="card"><h3>保證</h3><p class="muted">每段文字至少有一個共同 word。</p></div>
+</div>
+<div class="callout">官方題目明確要求以 <b>#</b> 結束每段文字，整份輸入則以 EOF 結束。</div>
+</section>
+
+<section class="section">
+<div class="section-title"><span class="no">05</span><h2>套用 LCS 後，題目就剩 4 步</h2></div>
+<div class="flow">
+<div class="step"><div class="num">1</div><b>讀入兩段文字</b><span class="muted">遇到 # 就結束目前文字。</span></div>
+<div class="step"><div class="num">2</div><b>把 word 當元素</b><span class="muted">不是把整句切成字元。</span></div>
+<div class="step"><div class="num">3</div><b>建立 DP 表</b><span class="muted">dp[i][j] 表示前 i 個 words 與前 j 個 words。</span></div>
+<div class="step"><div class="num">4</div><b>從右下角回溯</b><span class="muted">把真正的 words 找回來並輸出。</span></div>
+</div>
+</section>
+
+<section class="section" id="idea">
+<div class="section-title"><span class="no">05</span><h2>從 LCS 理論連到 UVa 531</h2></div>
+<div class="compare">
+<div class="card"><div class="label">TEXT A</div><div class="sequence"><span class="word">we</span><span class="word">study</span><span class="word">algorithms</span><span class="word">every</span><span class="word">day</span></div></div>
+<div class="arrow">→</div>
+<div class="card"><div class="label">TEXT B</div><div class="sequence"><span class="word">we</span><span class="word">practice</span><span class="word">algorithms</span><span class="word">every</span><span class="word">week</span></div></div>
+</div>
+<div class="card section">
+<h3>一眼看懂「子序列」</h3>
+<p class="muted">可以跳過 <b>study / practice / day / week</b>，但不能把 algorithms 放到 we 前面。只要共同 words 的相對順序不變，就符合 subsequence。</p>
+<div class="sequence"><span class="word pick">we</span><span class="word pick">algorithms</span><span class="word pick">every</span></div>
+</div>
+</section>
+
+<section class="section" id="dp">
+<div class="section-title"><span class="no">05</span><h2>在 UVa 531 裡，dp[i][j] 代表什麼？</h2></div>
+<div class="grid2">
+<div class="card">
+<h3>狀態定義</h3>
+<div class="callout"><b>dp[i][j]</b><br>代表 Text A 的前 i 個 words，與 Text B 的前 j 個 words，所能得到的 LCS 長度。</div>
+<p class="muted">這句話是整份程式最重要的註解。只要講清楚它，後面的兩個轉移式就很好理解。</p>
+</div>
+<div class="card">
+<h3>為什麼需要二維表？</h3>
+<p class="muted">因為每個位置都同時受到「A 用到哪裡」和「B 用到哪裡」影響。兩個 prefix 的組合就是一個子問題。</p>
+</div>
+</div>
+<div class="logic section">
+<div class="logic-row"><div class="tag">CASE 1<br>相同</div><div><b>A[i-1] == B[j-1]</b><br><span class="muted">兩個最後 word 相同，可以把它接到左上角的最佳答案後面：<br><strong>dp[i][j] = dp[i-1][j-1] + 1</strong></span></div></div>
+<div class="logic-row"><div class="tag">CASE 2<br>不同</div><div><b>A[i-1] != B[j-1]</b><br><span class="muted">最後兩個 word 不能同時加入，因此比較「不使用 A 的最後 word」與「不使用 B 的最後 word」：<br><strong>dp[i][j] = max(dp[i-1][j], dp[i][j-1])</strong></span></div></div>
+<div class="logic-row"><div class="tag">BASE</div><div><b>i = 0 或 j = 0</b><br><span class="muted">其中一段沒有 word，LCS 長度就是 0。</span></div></div>
+</div>
+</section>
+
+<section class="section" id="animation">
+<div class="section-title"><span class="no">06</span><h2>動畫：先驗證 LCS，再跑 UVa 531</h2></div>
+<p class="lead">這裡刻意使用一組「報告專用」的新資料，不直接拿官方 Sample 當動畫。你們上台時可以先讓同學猜答案，再按下一步，看程式如何填表。</p>
+<div class="card">
+<div class="demo"><div class="label">TEXT A</div><div id="animA" class="sequence"></div><div class="label">TEXT B</div><div id="animB" class="sequence"></div></div>
+<div class="anim-controls"><button class="btn primary" id="next">下一步</button><button class="btn" id="prev">上一步</button><button class="btn" id="play">▶ 自動播放</button><button class="btn" id="reset">重設</button></div>
+<div class="bar"><i id="progress"></i></div>
+<div class="anim-grid">
+<div class="table-wrap" id="dpTable"></div>
+<div class="explain"><div class="status" id="animStatus"></div><p id="animExplain" class="muted"></p><div class="big-result" id="animResult"></div></div>
+</div>
+</div>
+</section>
+
+<section class="section" id="code">
+<div class="section-title"><span class="no">07</span><h2>C++：把動畫翻成程式</h2></div>
+<div class="card code-card">
+<p class="lead">這份程式的核心不是很長，但有兩個容易講錯的地方：第一，輸入不是一行一組；第二，最後不能只印 dp[n][m]，因為題目要的是實際的 word 序列。</p>
+<div class="code-head"><b>UVa 531 · C++17</b><span>讀入 → DP → 回溯 → 輸出</span></div>
+<div class="code-body">
+<div class="code"><span class="cm">// UVa 531 - Compromise</span>
+<span class="kw">#include</span> &lt;bits/stdc++.h&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int main</span>() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    vector&lt;string&gt; A, B;
+    string word;
+
+    <span class="cm">// 一組測資：讀到第一個 #</span>
+    <span class="kw">while</span> (cin &gt;&gt; word) {
+        A.clear();
+        B.clear();
+
+        <span class="kw">while</span> (word != <span class="cm">"#"</span>) {
+            A.push_back(word);
+            cin &gt;&gt; word;
+        }
+
+        <span class="cm">// 再讀第二段文字，直到第二個 #</span>
+        <span class="kw">while</span> (cin &gt;&gt; word && word != <span class="cm">"#"</span>) {
+            B.push_back(word);
+        }
+
+        <span class="kw">int</span> n = A.size(), m = B.size();
+        vector&lt;vector&lt;int&gt;&gt; dp(n + 1,
+            vector&lt;int&gt;(m + 1, 0));
+
+        <span class="cm">// 1. 建立 LCS 長度表</span>
+        <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; ++i) {
+            <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= m; ++j) {
+                <span class="kw">if</span> (A[i - 1] == B[j - 1])
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                <span class="kw">else</span>
+                    dp[i][j] = max(dp[i - 1][j],
+                                   dp[i][j - 1]);
+            }
+        }
+
+        <span class="cm">// 2. 從右下角回溯，找出真正的答案</span>
+        vector&lt;string&gt; ans;
+        <span class="kw">int</span> i = n, j = m;
+
+        <span class="kw">while</span> (i &gt; 0 && j &gt; 0) {
+            <span class="kw">if</span> (A[i - 1] == B[j - 1]) {
+                ans.push_back(A[i - 1]);
+                --i;
+                --j;
+            } <span class="kw">else if</span> (dp[i - 1][j] &gt;= dp[i][j - 1]) {
+                --i;
+            } <span class="kw">else</span> {
+                --j;
+            }
+        }
+
+        reverse(ans.begin(), ans.end());
+
+        <span class="kw">for</span> (<span class="kw">int</span> k = 0; k &lt; (<span class="kw">int</span>)ans.size(); ++k) {
+            <span class="kw">if</span> (k) cout &lt;&lt; ' ';
+            cout &lt;&lt; ans[k];
+        }
+        cout &lt;&lt; '\n';
+    }
+}</div>
+</div>
+<div class="code-note"><div><b>① Input</b>讀兩段 word，遇到 # 結束。</div><div><b>② DP</b>相同走左上，不同取上／左最大。</div><div><b>③ Backtracking</b>從右下角找回真正的答案。</div>
+</div>
+</section>
+
+<section class="section" id="trace">
+<div class="section-title"><span class="no">08</span><h2>最後一步：為什麼還要回溯？</h2></div>
+<div class="grid2">
+<div class="card">
+<h3>DP 表告訴我們「多長」</h3>
+<p class="muted">dp[n][m] 是最長共同子序列的長度。例如答案長度是 4，但單看這個數字，你還不知道是哪四個 words。</p>
+</div>
+<div class="card">
+<h3>回溯才找回「哪四個」</h3>
+<p class="muted">從右下角開始。如果兩個 word 相同，就選它並斜走；如果不同，就往 DP 值比較大的方向走。</p>
+</div>
+</div>
+<div class="card section">
+<h3>上台可以這樣講</h3>
+<div class="trace-list">
+<div class="trace-item"><b>①</b> 「我們先用 DP 算出每個 prefix 的 LCS 長度。」</div>
+<div class="trace-item"><b>②</b> 「所以右下角知道最長答案有多長，但還沒有把單字存成答案。」</div>
+<div class="trace-item"><b>③</b> 「接著從右下角倒著走，遇到相同 word 就代表它是答案的一部分。」</div>
+<div class="trace-item"><b>④</b> 「因為我們是倒著找到答案，所以最後 reverse 一次，才是正確順序。」</div>
+</div>
+</div>
+<div class="warning">注意：當上方與左方 DP 值相同時，可以選其中一邊。題目允許多個最長共同子序列，所以不需要唯一答案。</div>
+</section>
+
+<section class="section" id="summary">
+<div class="section-title"><span class="no">09</span><h2>整題收尾：一張圖記住</h2></div>
+<div class="flow">
+<div class="step"><div class="num">A</div><b>讀 word</b><span class="muted">兩段文字，各自讀到 #。</span></div>
+<div class="step"><div class="num">B</div><b>DP 填表</b><span class="muted">相同 → 左上 + 1；不同 → 上左取大。</span></div>
+<div class="step"><div class="num">C</div><b>右下角</b><span class="muted">取得 LCS 的最大長度。</span></div>
+<div class="step"><div class="num">D</div><b>回溯輸出</b><span class="muted">找回真正的 words，reverse 後輸出。</span></div>
+</div>
+<div class="grid3 section">
+<div class="card"><h3>時間複雜度</h3><p><strong>O(n × m)</strong></p><p class="mini">n、m 分別是兩段文字的 word 數量。</p></div>
+<div class="card"><h3>空間複雜度</h3><p><strong>O(n × m)</strong></p><p class="mini">需要 DP 表支援最後的回溯。</p></div>
+<div class="card"><h3>題目重點</h3><p><strong>Word-level LCS</strong></p><p class="mini">核心不是字元，而是單字序列。</p></div>
+</div>
+<div class="callout"><b>報告主線：</b>「題目要求什麼 → 為什麼是 LCS → dp[i][j] 是什麼 → 兩種轉移 → 動畫驗證 → C++ 對照 → 回溯輸出。」這就是整份報告的故事線。</div>
+</section>
+
+<footer>
+<div>UVA 531 · Compromise</div>
+<div class="mini">題目資料來源：UVa Online Judge。官方題目將 531 Compromise 歸在 String Processing with DP。</div>
+</footer>
+</main>
+
+<script>
+(function(){
+const A=["we","study","algorithms","every","day"];
+const B=["we","practice","algorithms","every","week"];
+const $=id=>document.getElementById(id);
+let dp=[],frames=[],step=0,timer=null;
+
+function build(){
+ dp=Array.from({length:A.length+1},()=>Array(B.length+1).fill(0));
+ frames=[];
+ for(let i=1;i<=A.length;i++){
+  for(let j=1;j<=B.length;j++){
+   const match=A[i-1]===B[j-1];
+   const value=match?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+   dp[i][j]=value;
+   frames.push({i,j,match,value,up:dp[i-1][j],left:dp[i][j-1],diag:dp[i-1][j-1]});
+  }
+ }
+ step=0; render();
+}
+function drawWords(){
+ $("animA").innerHTML=A.map((x,i)=>'<span class="word '+(i===0||i===2||i===3?'hit':'')+'">'+x+'</span>').join('');
+ $("animB").innerHTML=B.map((x,i)=>'<span class="word '+(i===0||i===2||i===3?'hit':'')+'">'+x+'</span>').join('');
+}
+function path(){
+ const s=new Set();let i=A.length,j=B.length;
+ while(i&&j){
+  if(A[i-1]===B[j-1]){s.add(i+','+j);i--;j--;}
+  else if(dp[i-1][j]>=dp[i][j-1])i--;else j--;
+ }
+ return s;
+}
+function answer(){
+ const out=[];let i=A.length,j=B.length;
+ while(i&&j){
+  if(A[i-1]===B[j-1]){out.push(A[i-1]);i--;j--;}
+  else if(dp[i-1][j]>=dp[i][j-1])i--;else j--;
+ }
+ return out.reverse();
+}
+function render(){
+ let h='<table class="dp"><thead><tr><th></th><th>∅</th>'+B.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>';
+ const p=path();
+ for(let i=0;i<=A.length;i++){
+  h+='<tr><th>'+(i?A[i-1]:'∅')+'</th>';
+  for(let j=0;j<=B.length;j++){
+   const cls=[];
+   if(p.has(i+','+j))cls.push('path');
+   if(step>0&&step<=frames.length&&frames[step-1].i===i&&frames[step-1].j===j)cls.push('current');
+   if(i&&j&&A[i-1]===B[j-1])cls.push('match');
+   if(step>=frames.length&&i===A.length&&j===B.length)cls.push('final');
+   h+='<td class="'+cls.join(' ')+'">'+dp[i][j]+'</td>';
+  }
+  h+='</tr>';
+ }
+ $("dpTable").innerHTML=h+'</tbody></table>';
+ const pct=Math.round(step/frames.length*100);
+ $("progress").style.width=pct+'%';
+ if(step===0){
+  $("animStatus").textContent='準備開始';
+  $("animExplain").textContent='先看左上角：空集合與任何文字的 LCS 長度都是 0。按「下一步」開始填表。';
+  $("animResult").textContent='';
+ }else if(step<frames.length){
+  const f=frames[step-1];
+  $("animStatus").textContent='Step '+step+' / '+frames.length;
+  if(f.match){
+   $("animExplain").innerHTML='目前比較：<b>'+A[f.i-1]+'</b> 與 <b>'+B[f.j-1]+'</b>。兩個 word 相同，所以走左上角：<b>'+f.diag+' + 1 = '+f.value+'</b>。';
+  }else{
+   $("animExplain").innerHTML='目前比較：<b>'+A[f.i-1]+'</b> 與 <b>'+B[f.j-1]+'</b>。不同，所以比較上方 <b>'+f.up+'</b> 與左方 <b>'+f.left+'</b>，取較大值 <b>'+f.value+'</b>。';
+  }
+  $("animResult").textContent='目前 dp['+f.i+']['+f.j+'] = '+f.value;
+ }else{
+  const ans=answer();
+  $("animStatus").textContent='DP 填表完成，開始看回溯結果';
+  $("animExplain").textContent='右下角的值是 '+dp[A.length][B.length]+'。這代表最長共同 word 序列有 '+ans.length+' 個 word。接著從右下角回溯即可找出它們。';
+  $("animResult").innerHTML='LCS = <span>'+ans.join(' ')+'</span>';
+ }
+}
+function stop(){if(timer)clearInterval(timer);timer=null;$("play").textContent='▶ 自動播放';}
+$("next").onclick=()=>{if(step<frames.length)step++;else step=0;render();};
+$("prev").onclick=()=>{if(step>0)step--;render();};
+$("reset").onclick=()=>{stop();step=0;render();};
+$("play").onclick=()=>{
+ if(timer){stop();return}
+ if(step>=frames.length)step=0;
+ $("play").textContent='⏸ 暫停';
+ timer=setInterval(()=>{if(step>=frames.length){stop();render();return}step++;render();},520);
+};
+drawWords();build();
+})();
+</script>
+</body>
+</html>
