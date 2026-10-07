@@ -1,4 +1,4 @@
-+<!doctype html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
@@ -14,7 +14,7 @@
 </head>
 <body>
 <header class="top"><div class="wrap nav">
-<a href="#lcs">01 LCS</a><a href="#lcs-dp">02 LCS 的 DP</a><a href="#start">03 UVa 531 題目</a><a href="#input">04 輸入輸出</a><a href="#idea">05 套用 LCS</a><a href="#animation">06 動畫</a><a href="#code">07 C++</a><a href="#trace">08 回溯</a><a href="#summary">09 總結</a>
+<a href="#lcs">01 LCS</a><a href="#lcs-dp">02 LCS 的 DP</a><a href="#interactive">03 自己輸入 LCS</a><a href="#start">04 UVa 531 題目</a><a href="#input">05 輸入輸出</a><a href="#idea">06 套用 LCS</a><a href="#animation">07 動畫</a><a href="#code">08 C++</a><a href="#trace">09 回溯</a><a href="#summary">10 總結</a>
 </div></header>
 <main class="wrap">
 <section class="hero" id="lcs">
@@ -48,8 +48,24 @@
 <div class="callout"><b>到這裡先記住：</b>「相同 → 左上角 + 1；不同 → 上面和左邊取最大」。這就是 LCS DP 的核心。</div>
 </section>
 
+<section class="section" id="interactive">
+<div class="section-title"><span class="no">03</span><h2>自己輸入資料，現場演示 LCS</h2></div>
+<p class="lead">這一區直接使用 UVa 531 的「單字 LCS」概念。輸入兩段文字，系統會把空白分隔的單字當成元素，再逐格建立 DP 表。上台時可以直接換成老師或同學指定的資料。</p>
+<div class="card">
+<div class="grid2">
+<div><div class="label">TEXT A · WORDS</div><input id="customA" value="we study algorithms every day" maxlength="120" style="width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#0a1020;color:#fff;font:16px ui-monospace,monospace;outline:none"></div>
+<div><div class="label">TEXT B · WORDS</div><input id="customB" value="we practice algorithms every week" maxlength="120" style="width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#0a1020;color:#fff;font:16px ui-monospace,monospace;outline:none"></div>
+</div>
+<div class="anim-controls"><button class="btn primary" id="customStart">開始演示</button><button class="btn" id="customPrev">← 上一步</button><button class="btn" id="customNext">下一步 →</button><button class="btn" id="customPlay">▶ 自動播放</button><button class="btn" id="customReset">重設</button></div>
+<div class="grid2">
+<div class="table-wrap" id="customTable"></div>
+<div class="explain"><div class="status" id="customStatus">輸入資料後按「開始演示」</div><p id="customExplain" class="muted">例如輸入「we study algorithms」與「we practice algorithms」，程式會把每個 word 當成一個元素，找出共同且順序不變的最長序列。</p><div class="big-result" id="customResult"></div></div>
+</div>
+</div>
+</section>
+
 <section class="section" id="start">
-<div class="section-title"><span class="no">01</span><h2>先把題目翻成白話</h2></div>
+<div class="section-title"><span class="no">04</span><h2>先把題目翻成白話</h2></div>
 <p class="lead">前面我們講的是「元素可以是字元」的 LCS。現在來看 UVa 531：它做的事情完全一樣，只是把 LCS 的元素從<strong>字元換成單字</strong>。</p>
 <div class="grid2">
 <div class="card"><h3>題目真正要你做什麼？</h3><p class="muted">兩位政治人物各自輸入一份由單字組成的提案。程式要找出兩份提案中，順序不變、可以跳過其他單字的<strong>最長共同單字序列</strong>。</p><div class="callout"><b>關鍵：</b>這就是 LCS，只是比較單位從 character 變成 word。</div></div>
@@ -59,7 +75,7 @@
 </section>
 
 <section class="section" id="input">
-<div class="section-title"><span class="no">04</span><h2>UVa 531 的 Input / Output</h2></div>
+<div class="section-title"><span class="no">05</span><h2>UVa 531 的 Input / Output</h2></div>
 <div class="grid2">
 <div><div class="label">INPUT RULE</div><div class="problem-box">test case 1：第一段文字
 test case 1：第二段文字
@@ -81,7 +97,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section">
-<div class="section-title"><span class="no">05</span><h2>套用 LCS 後，題目就剩 4 步</h2></div>
+<div class="section-title"><span class="no">06</span><h2>套用 LCS 後，題目就剩 4 步</h2></div>
 <div class="flow">
 <div class="step"><div class="num">1</div><b>讀入兩段文字</b><span class="muted">遇到 # 就結束目前文字。</span></div>
 <div class="step"><div class="num">2</div><b>把 word 當元素</b><span class="muted">不是把整句切成字元。</span></div>
@@ -91,7 +107,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="idea">
-<div class="section-title"><span class="no">05</span><h2>從 LCS 理論連到 UVa 531</h2></div>
+<div class="section-title"><span class="no">06</span><h2>從 LCS 理論連到 UVa 531</h2></div>
 <div class="compare">
 <div class="card"><div class="label">TEXT A</div><div class="sequence"><span class="word">we</span><span class="word">study</span><span class="word">algorithms</span><span class="word">every</span><span class="word">day</span></div></div>
 <div class="arrow">→</div>
@@ -105,7 +121,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="dp">
-<div class="section-title"><span class="no">05</span><h2>在 UVa 531 裡，dp[i][j] 代表什麼？</h2></div>
+<div class="section-title"><span class="no">06</span><h2>在 UVa 531 裡，dp[i][j] 代表什麼？</h2></div>
 <div class="grid2">
 <div class="card">
 <h3>狀態定義</h3>
@@ -125,7 +141,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="animation">
-<div class="section-title"><span class="no">06</span><h2>動畫：先驗證 LCS，再跑 UVa 531</h2></div>
+<div class="section-title"><span class="no">07</span><h2>動畫：先驗證 LCS，再跑 UVa 531</h2></div>
 <p class="lead">這裡刻意使用一組「報告專用」的新資料，不直接拿官方 Sample 當動畫。你們上台時可以先讓同學猜答案，再按下一步，看程式如何填表。</p>
 <div class="card">
 <div class="demo"><div class="label">TEXT A</div><div id="animA" class="sequence"></div><div class="label">TEXT B</div><div id="animB" class="sequence"></div></div>
@@ -139,7 +155,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="code">
-<div class="section-title"><span class="no">07</span><h2>C++：把動畫翻成程式</h2></div>
+<div class="section-title"><span class="no">08</span><h2>C++：把動畫翻成程式</h2></div>
 <div class="card code-card">
 <p class="lead">這份程式的核心不是很長，但有兩個容易講錯的地方：第一，輸入不是一行一組；第二，最後不能只印 dp[n][m]，因為題目要的是實際的 word 序列。</p>
 <div class="code-head"><b>UVa 531 · C++17</b><span>讀入 → DP → 回溯 → 輸出</span></div>
@@ -216,7 +232,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="trace">
-<div class="section-title"><span class="no">08</span><h2>最後一步：為什麼還要回溯？</h2></div>
+<div class="section-title"><span class="no">09</span><h2>最後一步：為什麼還要回溯？</h2></div>
 <div class="grid2">
 <div class="card">
 <h3>DP 表告訴我們「多長」</h3>
@@ -240,7 +256,7 @@ EOF</div><p class="muted">每一段文字由小寫單字組成，以空白分隔
 </section>
 
 <section class="section" id="summary">
-<div class="section-title"><span class="no">09</span><h2>整題收尾：一張圖記住</h2></div>
+<div class="section-title"><span class="no">10</span><h2>整題收尾：一張圖記住</h2></div>
 <div class="flow">
 <div class="step"><div class="num">A</div><b>讀 word</b><span class="muted">兩段文字，各自讀到 #。</span></div>
 <div class="step"><div class="num">B</div><b>DP 填表</b><span class="muted">相同 → 左上 + 1；不同 → 上左取大。</span></div>
@@ -350,6 +366,33 @@ $("play").onclick=()=>{
  timer=setInterval(()=>{if(step>=frames.length){stop();render();return}step++;render();},520);
 };
 drawWords();build();
+})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+let A=[],B=[],dp=[],frames=[],k=0,timer=null;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function stop(){if(timer)clearInterval(timer);timer=null;$("customPlay").textContent='▶ 自動播放';}
+function build(){
+ stop(); A=$("customA").value.trim().split(/\s+/).filter(Boolean).slice(0,12); B=$("customB").value.trim().split(/\s+/).filter(Boolean).slice(0,12);
+ dp=Array.from({length:A.length+1},()=>Array(B.length+1).fill(0));frames=[];k=0;
+ for(let i=1;i<=A.length;i++)for(let j=1;j<=B.length;j++){const match=A[i-1]===B[j-1],value=match?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);dp[i][j]=value;frames.push({i,j,match,value,up:dp[i-1][j],left:dp[i][j-1],diag:dp[i-1][j-1]});}
+ render();
+}
+function path(){const s=new Set();let i=A.length,j=B.length;while(i&&j){if(A[i-1]===B[j-1]){s.add(i+','+j);i--;j--;}else if(dp[i-1][j]>=dp[i][j-1])i--;else j--;}return s;}
+function answer(){const out=[];let i=A.length,j=B.length;while(i&&j){if(A[i-1]===B[j-1]){out.push(A[i-1]);i--;j--;}else if(dp[i-1][j]>=dp[i][j-1])i--;else j--;}return out.reverse().join('');}
+function render(){
+ const p=path();let h='<table class="dp"><thead><tr><th></th><th>∅</th>'+B.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
+ for(let i=0;i<=A.length;i++){h+='<tr><th>'+(i?esc(A[i-1]):'∅')+'</th>';for(let j=0;j<=B.length;j++){const c=[];if(p.has(i+','+j))c.push('path');if(k&&k<=frames.length&&frames[k-1].i===i&&frames[k-1].j===j)c.push('current');if(i&&j&&A[i-1]===B[j-1])c.push('match');if(k>=frames.length&&i===A.length&&j===B.length&&frames.length)c.push('final');h+='<td class="'+c.join(' ')+'">'+dp[i][j]+'</td>'}h+='</tr>'}
+ $("customTable").innerHTML=h+'</tbody></table>';
+ if(!A.length||!B.length){$("customStatus").textContent='請輸入兩組資料';$("customExplain").textContent='兩組資料都要至少有一個 word。';$("customResult").textContent='';return;}
+ if(k===0){$("customStatus").textContent='準備好了：共 '+frames.length+' 個 DP 格子';$("customExplain").textContent='按「下一步」開始，觀察目前比較的兩個 word。';$("customResult").textContent='';}
+ else if(k<frames.length){const f=frames[k-1];$("customStatus").textContent='Step '+k+' / '+frames.length;if(f.match)$("customExplain").innerHTML='<b>'+esc(A[f.i-1])+' = '+esc(B[f.j-1])+'</b>：相同，走左上角 '+f.diag+' + 1 = '+f.value+'。';else $("customExplain").innerHTML='<b>'+esc(A[f.i-1])+' ≠ '+esc(B[f.j-1])+'</b>：比較上方 '+f.up+' 和左方 '+f.left+'，取 '+f.value+'。';$("customResult").textContent='目前 dp['+f.i+']['+f.j+'] = '+f.value;}
+ else{$("customStatus").textContent='完成！';$("customExplain").textContent='右下角的數字就是 LCS 長度，再從右下角回溯找出實際答案。';$("customResult").innerHTML='LCS = <span>'+esc(answer())+'</span>';}
+}
+function next(){if(k<frames.length)k++;render();}
+$("customStart").onclick=build;$("customNext").onclick=next;$("customPrev").onclick=()=>{if(k>0)k--;render()};$("customReset").onclick=()=>{stop();k=0;render()};$("customPlay").onclick=()=>{if(timer){stop();return;}if(k>=frames.length)k=0;$("customPlay").textContent='⏸ 暫停';timer=setInterval(()=>{if(k>=frames.length){stop();render();return;}k++;render();},450);render();};build();
 })();
 </script>
 </body>
